@@ -1,4 +1,4 @@
-\documentclass[preprint]{sigplanconf}
+\documentclass{sigplanconf}
 
 % The following \documentclass options may be useful:
 
@@ -33,9 +33,10 @@
 \titlebanner{DRAFT}        % These are ignored unless
 \preprintfooter{FHPC invited talk}   % 'preprint' option specified.
 
-\title{Scalan: A Framework for Domain-Specific Hotspot Optimization} % TODO decide final title
+\title{Scalan: A Framework for Domain-Specific Hotspot Optimization}
+\subtitle{(Invited Tutorial)}
 
-\authorinfo{Alexander Slesarenko\and Alexey Romanov}
+\authorinfo{Alexander Slesarenko\\Alexey Romanov}
            {Shannon Laboratory, Huawei Technologies, Moscow, Russia}
            {\{alexander.slesarenko, alexey.romanov\}@huawei.com}
 
@@ -45,8 +46,8 @@
 
 % general terms are not compulsory anymore, 
 % you may leave them out
-% \terms
-% term1, term2
+\terms
+Languages, Design
 
 \keywords
 DSL, domain-specific languages, high-performance computing, Scalan
@@ -55,33 +56,20 @@ DSL, domain-specific languages, high-performance computing, Scalan
 While high-level abstractions greatly simplify program development, they ultimately need to be eliminated to produce high-performance code. This can be done using generative programming; one particularly usable approach is Lightweight Modular Staging~\cite{DBLP:journals/cacm/RompfO12, DBLP:conf/snapl/RompfBLSJAOSKDK15}.
 
 We present Scalan, a framework which enables compilation of high-level object-oriented-functional code into high-performance low-level code. It extends the basic LMS approach by making rewrite rules and compilation stages first-class and extending the graph IR with object-oriented features.
-% \end{abstract}
 
 Rewrite rules are represented as graph IR nodes with edges pointing to a \emph{pattern graph} and a \emph{replacement graph}; whenever new nodes are constructed, they are compared with the pattern graphs of all active rules and in case a match is found, the corresponding replacement graph is generated instead.
 
 Compilation stages are represented as graph transformers and together with the final output generation stage assembled into a compilation pipeline. This allows using multiple backends together, for example generating C/C++ code with JNI wrappers for the most performance-critical parts and Spark code which calls into it for the rest. % maybe just mention Scala instead of Spark?
 
-We show how object-oriented programming is supported by staging class constructors and method calls (including ``factory'' methods on companion objects) as part of the IR, thus exposing them to rewrite rules like all other operations. JVM mechanisms allow treating symbols as typed proxies for their corresponding nodes. Now it becomes necessary to eliminate such nodes at some compilation stage to avoid virtual dispatch in the output code (or at least minimize it for OO target languages).
+We will show how object-oriented programming is supported by staging class constructors and method calls (including ``factory'' methods on companion objects) as part of the IR, thus exposing them to rewrite rules like all other operations. JVM mechanisms allow treating symbols as typed proxies for their corresponding nodes. Now it becomes necessary to eliminate such nodes at some compilation stage to avoid virtual dispatch in the output code (or at least minimize it for object-oriented target languages).
 
-In the simple case when the receiver node of a method is a class constructor, we can simply delegate the call to the subject at that stage. The more interesting case when the receiver node is the result of a calculation is handled by \emph{isomorphic specialization}, as previously described in~\cite{DBLP:conf/icfp/SlesarenkoFR14}. % We will explain changes in our implementation since that work.
+In the simple case when the receiver node of a method is a class constructor, we can simply delegate the call to the subject at that stage. The more interesting case when the receiver node is the result of a calculation is handled by \emph{isomorphic specialization}. This effectively enables virtual dispatch to be carried out at staging time, as previously described in~\cite{DBLP:conf/icfp/SlesarenkoFR14}.
 
-We will also demonstrate how the use of a Scala compiler plugin further simplifies development by avoiding the explicit use of the {\tt Rep} type constructor and how our framework can handle effects using free monads.
-% useful? 
+We will demonstrate how we use a Scala compiler plugin to further simplify development by avoiding the explicit use of the {\tt Rep} type constructor and how our framework can handle effects using free monads.
 
 We will finish by discussing future plans for Scalan development.
-% Higher kinds? The example is impressive and it wasn't in the previous paper
 
 \end{abstract}
-
-%
-%\appendix
-%\section{Appendix Title}
-%
-%This is the text of the appendix, if you need one.
-%
-%\acks
-%
-%Acknowledgments, if needed.
 
 % We recommend abbrvnat bibliography style.
 
